@@ -1,0 +1,8 @@
+
+
+
+
+# JWT settings
+jwt:
+  secret: secretWord
+  expiration: 1
