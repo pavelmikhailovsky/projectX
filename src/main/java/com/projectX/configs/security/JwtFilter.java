@@ -1,5 +1,6 @@
 package com.projectX.configs.security;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,8 +19,10 @@ import static io.jsonwebtoken.lang.Strings.hasText;
 @Component
 public class JwtFilter extends GenericFilterBean {
 
-    private static final String AUTHORIZATION = "Authorization";
+    private final String AUTHORIZATION = "Authorization";
 
+    @Value("${jwt.type}")
+    private String tokenType;
     private JwtProvider jwtProvider;
     private CustomUserDetailsService customUserDetailsService;
 
@@ -42,9 +45,13 @@ public class JwtFilter extends GenericFilterBean {
 
     private String getTokenFromRequest(HttpServletRequest httpServletRequest) {
         String token = null;
-        String bearer = httpServletRequest.getHeader(AUTHORIZATION);
-        if (hasText(bearer) && bearer.startsWith("Bearer ")) {
-            token = bearer.substring(7);
+        String headerAuth = httpServletRequest.getHeader(AUTHORIZATION);
+
+        // Here the number 1 is equal to a space
+        int amountChar = tokenType.length() + 1;
+
+        if (hasText(headerAuth) && headerAuth.startsWith(tokenType + " ")) {
+            token = headerAuth.substring(amountChar);
         }
         return token;
     }

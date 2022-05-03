@@ -6,3 +6,4 @@
 jwt:
   secret: secretWord
   expiration: 1
+  type: Bearer
