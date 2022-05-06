@@ -1,8 +1,10 @@
 package com.projectX.controllers.user;
 
 import com.projectX.dto.RegistrationRequest;
+import com.projectX.dto.TokenReturn;
 import com.projectX.services.UserService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,10 +18,11 @@ public class UserController {
     }
 
     @PostMapping("/registration")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void registrationUser(@RequestBody RegistrationRequest registrationRequest) {
-        userService.registrationUser(registrationRequest);
-        // TODO return jwtToken
+    public ResponseEntity<TokenReturn> registrationUser(@RequestBody RegistrationRequest registrationRequest) {
+        String token = userService.registrationUserAndCreateToken(registrationRequest);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(new TokenReturn(token));
     }
 
 }

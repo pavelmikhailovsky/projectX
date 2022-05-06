@@ -1,6 +1,6 @@
 package com.projectX.configs.security;
 
-import com.projectX.entity.User;
+import com.projectX.entities.User;
 import com.projectX.services.UserService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

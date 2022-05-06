@@ -1,7 +1,6 @@
-package com.projectX.entity;
+package com.projectX.entities;
 
 
-import com.projectX.dto.Role;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

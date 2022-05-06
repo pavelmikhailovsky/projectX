@@ -1,6 +1,6 @@
 package com.projectX.configs.security;
 
-import com.projectX.entity.User;
+import com.projectX.entities.User;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
