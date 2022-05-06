@@ -1,7 +1,8 @@
 package com.projectX.controllers.user;
 
+import com.projectX.dto.LoginRequest;
 import com.projectX.dto.RegistrationRequest;
-import com.projectX.dto.TokenReturn;
+import com.projectX.dto.TokenReturnResponse;
 import com.projectX.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,11 +19,19 @@ public class UserController {
     }
 
     @PostMapping("/registration")
-    public ResponseEntity<TokenReturn> registrationUser(@RequestBody RegistrationRequest registrationRequest) {
+    public ResponseEntity<TokenReturnResponse> registrationUser(@RequestBody RegistrationRequest registrationRequest) {
         String token = userService.registrationUserAndCreateToken(registrationRequest);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(new TokenReturn(token));
+                .body(new TokenReturnResponse(token));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<TokenReturnResponse> loginUser(@RequestBody LoginRequest loginRequest) {
+        String token = userService.loginUser(loginRequest);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new TokenReturnResponse(token));
     }
 
 }

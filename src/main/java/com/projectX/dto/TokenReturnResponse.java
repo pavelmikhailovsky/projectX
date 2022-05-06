@@ -6,7 +6,7 @@ import lombok.*;
 @EqualsAndHashCode
 @Getter
 @ToString
-public class TokenReturn {
+public class TokenReturnResponse {
 
     @NonNull
     private String token;

@@ -1,5 +1,6 @@
 package com.projectX.dao;
 
+import com.projectX.entities.User;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,12 +23,11 @@ public class UserDao {
         return query.executeUpdate();
     }
 
-//    public User retrieve(String username) {
-//        return
-//    }
-
-    public void delete(String username) {
-
+    @Transactional
+    public User retrieve(String username) {
+        String nativeQuery = "SELECT * FROM users WHERE username=:username";
+        Query query = entityManager.createNativeQuery(nativeQuery, User.class)
+                .setParameter("username", username);
+        return (User) query.getSingleResult();
     }
-
 }
