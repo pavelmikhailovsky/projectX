@@ -9,7 +9,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 @Repository
-public class UserDao {
+public class UserDAO {
 
     @PersistenceContext
     private EntityManager entityManager;

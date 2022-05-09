@@ -1,28 +1,28 @@
 package com.projectX.services;
 
 import com.projectX.configs.security.JwtProvider;
-import com.projectX.dao.UserDao;
+import com.projectX.dao.UserDAO;
 import com.projectX.dto.LoginRequest;
 import com.projectX.dto.RegistrationRequest;
+import com.projectX.dto.UserDTO;
 import com.projectX.entities.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.security.Principal;
+
 @Service
 public class UserService {
 
-    private UserDao userDao;
+    private UserDAO userDao;
     private JwtProvider jwtProvider;
     private PasswordEncoder passwordEncoder;
 
-    public UserService(UserDao userDao, JwtProvider jwtProvider, PasswordEncoder passwordEncoder) {
+    public UserService(UserDAO userDao, JwtProvider jwtProvider, PasswordEncoder passwordEncoder) {
         this.userDao = userDao;
         this.jwtProvider = jwtProvider;
         this.passwordEncoder = passwordEncoder;
-    }
-
-    public User getUserByUsername(String username) {
-        return null;
     }
 
     public String registrationUserAndCreateToken(RegistrationRequest registrationRequest) {
@@ -49,5 +49,10 @@ public class UserService {
         }
 
         return token;
+    }
+
+    public UserDTO showInfoAboutCurrentUser(Principal principal) throws IOException, NoSuchMethodException {
+        User user = userDao.retrieve(principal.getName());
+        return new UserDTO(user);
     }
 }

@@ -1,7 +1,7 @@
 package com.projectX.configs.security;
 
+import com.projectX.dao.UserDAO;
 import com.projectX.entities.User;
-import com.projectX.services.UserService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -10,15 +10,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private UserService userService;
+    private UserDAO userDao;
 
-    public CustomUserDetailsService(UserService userService) {
-        this.userService = userService;
+    public CustomUserDetailsService(UserDAO userDao) {
+        this.userDao = userDao;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userService.getUserByUsername(username);
+        User user = userDao.retrieve(username);
         return SecurityUser.fromUser(user);
     }
 }
