@@ -6,6 +6,8 @@ import com.projectX.dto.LoginRequest;
 import com.projectX.dto.RegistrationRequest;
 import com.projectX.dto.UserDTO;
 import com.projectX.entities.User;
+import com.projectX.exceptions.user.UniqueUsernameException;
+import com.projectX.exceptions.user.UserWrongCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +27,7 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public String registrationUserAndCreateToken(RegistrationRequest registrationRequest) {
+    public String registrationUserAndCreateToken(RegistrationRequest registrationRequest) throws UniqueUsernameException {
         String token = "";
         String login = registrationRequest.getLogin();
         String password = passwordEncoder.encode(registrationRequest.getPassword());
@@ -38,7 +40,7 @@ public class UserService {
         return token;
     }
 
-    public String loginUser(LoginRequest loginRequest) {
+    public String loginUser(LoginRequest loginRequest) throws UserWrongCredentialsException {
         String token = "";
         String login = loginRequest.getLogin();
         String password = loginRequest.getPassword();
@@ -46,12 +48,14 @@ public class UserService {
 
         if (passwordEncoder.matches(password, user.getPassword())) {
             token = jwtProvider.generateToken(login);
+        } else {
+            throw new UserWrongCredentialsException("Login or password entered incorrectly.");
         }
 
         return token;
     }
 
-    public UserDTO showInfoAboutCurrentUser(Principal principal) throws IOException, NoSuchMethodException {
+    public UserDTO showInfoAboutCurrentUser(Principal principal) throws UserWrongCredentialsException {
         User user = userDao.retrieve(principal.getName());
         return new UserDTO(user);
     }

@@ -2,6 +2,7 @@ package com.projectX.configs.security;
 
 import com.projectX.dao.UserDAO;
 import com.projectX.entities.User;
+import com.projectX.exceptions.user.UserWrongCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,7 +19,12 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userDao.retrieve(username);
+        User user = null;
+        try {
+            user = userDao.retrieve(username);
+        } catch (UserWrongCredentialsException e) {
+            throw new RuntimeException(e);
+        }
         return SecurityUser.fromUser(user);
     }
 }

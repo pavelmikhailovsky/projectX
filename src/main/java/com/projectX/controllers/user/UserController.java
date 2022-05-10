@@ -4,12 +4,13 @@ import com.projectX.dto.LoginRequest;
 import com.projectX.dto.RegistrationRequest;
 import com.projectX.dto.TokenReturnResponse;
 import com.projectX.dto.UserDTO;
+import com.projectX.exceptions.user.UniqueUsernameException;
+import com.projectX.exceptions.user.UserWrongCredentialsException;
 import com.projectX.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.security.Principal;
 
 @RestController
@@ -23,7 +24,7 @@ public class UserController {
     }
 
     @PostMapping("/registration")
-    public ResponseEntity<TokenReturnResponse> registration(@RequestBody RegistrationRequest registrationRequest) {
+    public ResponseEntity<TokenReturnResponse> registration(@RequestBody RegistrationRequest registrationRequest) throws UniqueUsernameException {
         String token = userService.registrationUserAndCreateToken(registrationRequest);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -31,7 +32,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<TokenReturnResponse> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<TokenReturnResponse> login(@RequestBody LoginRequest loginRequest) throws UserWrongCredentialsException {
         String token = userService.loginUser(loginRequest);
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -39,7 +40,7 @@ public class UserController {
     }
 
     @GetMapping("/profile")
-    public ResponseEntity<UserDTO> profile(Principal principal) throws IOException, NoSuchMethodException {
+    public ResponseEntity<UserDTO> profile(Principal principal) throws UserWrongCredentialsException {
         UserDTO userInfo = userService.showInfoAboutCurrentUser(principal);
         return ResponseEntity
                 .status(HttpStatus.OK)
